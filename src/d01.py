@@ -1,5 +1,7 @@
 import argparse
 
+import time
+
 
 def run(inp, q2=False):
     res = 0
@@ -27,4 +29,7 @@ def main():
 
 
 if __name__ == '__main__':
+    s = time.perf_counter()
     main()
+    e = time.perf_counter()
+    print("time elapsed: {} s".format(e - s))
