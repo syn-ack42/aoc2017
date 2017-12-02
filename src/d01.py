@@ -1,7 +1,3 @@
-import argparse
-
-import time
-
 
 def run(inp, q2=False):
     res = 0
@@ -17,19 +13,3 @@ def run(inp, q2=False):
 
     return res
 
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--q2", "-2", help="question 2", action="store_true")
-    parser.add_argument("input", help="puzzle input", nargs=1)
-    args = parser.parse_args()
-
-    answer = run(args.input[0], args.q2)
-    print("answer: {}".format(answer))
-
-
-if __name__ == '__main__':
-    s = time.perf_counter()
-    main()
-    e = time.perf_counter()
-    print("time elapsed: {} s".format(e - s))
