@@ -27,7 +27,11 @@ def main():
         print("no input, sucker!")
         exit(1)
 
-    answer = m.run(inp, args.q2)
+    if args.q2:
+        answer = m.run_2(inp)
+    else:
+        answer = m.run_1(inp)
+
     print("answer: {}".format(answer))
 
 

@@ -1,6 +1,15 @@
 import collections
 import math
 
+
+def run_1(inp):
+    return run(inp)
+
+
+def run_2(inp):
+    return run(inp, True)
+
+
 def run(inp, q2=False):
     inp = int(inp)
 
@@ -12,17 +21,19 @@ def run(inp, q2=False):
 
     return res
 
+
 def find_upper_square(n):
     i = 1
     while True:
-        if (i*i >= n):
+        if (i * i >= n):
             return i
         i += 2
 
+
 def dist_to_middle(square_size, pos):
-    pos = (pos - (square_size-2)**2)
-    d_inw = (square_size -1 ) / 2
-    d_round = abs((pos % (square_size-1)) - (square_size -1)/2)
+    pos = (pos - (square_size - 2) ** 2)
+    d_inw = (square_size - 1) / 2
+    d_round = abs((pos % (square_size - 1)) - (square_size - 1) / 2)
     return int(d_inw + d_round)
 
 
@@ -63,7 +74,8 @@ def is_square_of_uneven(n):
     else:
         return None
 
-def sum_adjacent(arr, x ,y):
+
+def sum_adjacent(arr, x, y):
     if x == y == 0:
         return 1
     s = 0
@@ -75,6 +87,7 @@ def sum_adjacent(arr, x ,y):
                 if (y + yp) in arr[x + xp]:
                     s += arr[x + xp][y + yp]
     return s
+
 
 def run_2(max_val):
     a = {0: {0: 1}}
@@ -96,5 +109,3 @@ def run_2(max_val):
                 a[x] = {}
             a[x][y] = s
             last = s
-
-

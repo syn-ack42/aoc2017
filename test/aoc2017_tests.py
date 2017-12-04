@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src import d01, d02, d03
+from src import d01, d02, d03, d04
 
 
 class Test_d01(TestCase):
@@ -74,3 +74,31 @@ class Test_d03(TestCase):
         self.assertEqual(d03.run_2(3), 4)
         self.assertEqual(d03.run_2(21), 23)
         self.assertEqual(d03.run_2(145), 147)
+
+
+class Test_d04(TestCase):
+    def test_is_valid_phrase(self):
+        self.assertEqual(d04.is_valid_phrase("aa bb cc dd ee"), True)
+        self.assertEqual(d04.is_valid_phrase("aa bb cc dd aa"), False)
+        self.assertEqual(d04.is_valid_phrase("aa bb cc dd aaa"), True)
+
+    def test_run_1(self):
+        inp = """aa bb cc dd ee
+aa bb cc dd aa
+aa bb cc dd aaa"""
+        self.assertEqual(d04.run_1(inp), 2)
+
+    def test_is_anagram_free(self):
+        self.assertEqual(d04.is_anagram_free("abcde fghij"), True)
+        self.assertEqual(d04.is_anagram_free("abcde xyz ecdab"), False)
+        self.assertEqual(d04.is_anagram_free("a ab abc abd abf abj"), True)
+        self.assertEqual(d04.is_anagram_free("iiii oiii ooii oooi oooo"), True)
+        self.assertEqual(d04.is_anagram_free("oiii ioii iioi iiio"), False)
+
+    def test_run_2(self):
+        inp = """abcde fghij
+        abcde xyz ecdab
+        a ab abc abd abf abj
+        iiii oiii ooii oooi oooo
+        oiii ioii iioi iiio"""
+        self.assertEqual(d04.run_2(inp), 3)
