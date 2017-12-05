@@ -102,3 +102,23 @@ aa bb cc dd aaa"""
         iiii oiii ooii oooi oooo
         oiii ioii iioi iiio"""
         self.assertEqual(d04.run_2(inp), 3)
+
+
+class Test_d05(TestCase):
+
+    def test_run_1(self):
+        inp = """abcde fghij
+        abcde xyz ecdab
+        a ab abc abd abf abj
+        iiii oiii ooii oooi oooo
+        oiii ioii iioi iiio"""
+        self.assertEqual(d04.run_1(inp), 2)
+
+
+    def test_run_2(self):
+        inp = """abcde fghij
+        abcde xyz ecdab
+        a ab abc abd abf abj
+        iiii oiii ooii oooi oooo
+        oiii ioii iioi iiio"""
+        self.assertEqual(d04.run_2(inp), 3)
