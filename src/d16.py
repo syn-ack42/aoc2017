@@ -103,8 +103,14 @@ def run_2(inp):
 
     max = 1000000000
     i = 0
+    init = "".join(c.mem)
     while i < max:
         c.run_x()
+        if init == "".join(c.mem):
+            print("same after {}".format(i))
+            max %= (i+1)
+            i = 0
+            continue
 
         if i % 1000000 == 0:
             print("loop {}".format(i))
