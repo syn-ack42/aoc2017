@@ -2,19 +2,13 @@ import re
 
 
 class CPU(object):
-    def __init__(self, instructions, ident=None):
+    def __init__(self, instructions, ident=None, max_register="z"):
         self.raw_instructions = instructions
         self.instructions = self.parse_inst(instructions)
-        self.registers = {chr(x): 0 for x in range(ord('a'), ord('z') + 1)}
-        self.last_frequency = None
+        self.registers = {chr(x): 0 for x in range(ord('a'), ord(max_register) + 1)}
         self.inst_ptr = 0
         self.id = ident
-        if not (ident is None):
-            self.registers["p"] = ident
-        self.peer = None
-        self.queue = []
         self.terminated = False
-        self.send_cnt = 0
 
     def parse_inst(self, instructions):
         ret = []
@@ -28,15 +22,21 @@ class CPU(object):
             ret.append((f, x_r, x_i, y_r, y_i))
         return ret
 
-    def snd(self, x_r, x_i, y_r, y_i):
-        if self.id is None:
-            self.last_frequency = self.registers[x_r] if (x_i is None) else x_i
-            return True
-        else:
-            v = self.registers[x_r] if (x_i is None) else x_i
-            self.peer.queue.insert(0, v)
-            self.send_cnt += 1
-            return True
+    def step(self):
+        if self.terminated:
+            return False
+
+        i = self.instructions[self.inst_ptr]
+        if not i[0](i[1], i[2], i[3], i[4]):
+            return False
+
+        self.inst_ptr += 1
+
+        if self.inst_ptr >= len(self.instructions):
+            self.terminated = True
+            return False
+
+        return True
 
     def set(self, x_r, x_i, y_r, y_i):
         self.registers[x_r] = self.registers[y_r] if (y_i is None) else y_i
@@ -53,6 +53,33 @@ class CPU(object):
     def mod(self, x_r, x_i, y_r, y_i):
         self.registers[x_r] %= self.registers[y_r] if (y_i is None) else y_i
         return True
+
+    def run(self):
+        while self.step():
+            pass
+        self.terminated = True
+
+class CPU18(CPU):
+    def __init__(self, instructions, ident=None):
+        super().__init__(instructions, ident=ident, max_register="z")
+        self.last_frequency = None
+        if not (ident is None):
+            self.registers["p"] = ident
+        self.peer = None
+        self.queue = []
+        self.send_cnt = 0
+
+    def snd(self, x_r, x_i, y_r, y_i):
+        if self.id is None:
+            self.last_frequency = self.registers[x_r] if (x_i is None) else x_i
+            return True
+        else:
+            v = self.registers[x_r] if (x_i is None) else x_i
+            self.peer.queue.insert(0, v)
+            self.send_cnt += 1
+            return True
+
+
 
     def rcv(self, x_r, x_i, y_r, y_i):
         if self.id is None:
@@ -80,27 +107,6 @@ class CPU(object):
         return True
 
 
-    def step(self):
-        if self.terminated:
-            return False
-
-        i = self.instructions[self.inst_ptr]
-        if not i[0](i[1], i[2], i[3], i[4]):
-            return False
-
-        self.inst_ptr += 1
-
-        if self.inst_ptr >= len(self.instructions):
-            self.terminated = True
-            return False
-
-        return True
-
-
-    def run(self):
-        while self.step():
-            pass
-        return self.last_frequency
 
 def run_1(inp):
     '''
@@ -118,8 +124,9 @@ def run_1(inp):
 >>> d18.run_1(inp)
 4
     '''
-    c = CPU(inp.splitlines())
-    return c.run()
+    c = CPU18(inp.splitlines())
+    c.run()
+    return c.last_frequency
 
 
 def run_2(inp):
@@ -132,8 +139,8 @@ def run_2(inp):
 ... rcv b
 ... rcv c
 ... rcv d"""
->>> c0 = d18.CPU(instructions=inp.splitlines(), ident=0)
->>> c1 = d18.CPU(instructions=inp.splitlines(), ident=1)
+>>> c0 = d18.CPU18(instructions=inp.splitlines(), ident=0)
+>>> c1 = d18.CPU18(instructions=inp.splitlines(), ident=1)
 >>> c0.peer = c1
 >>> c1.peer = c0
 >>> while True:
@@ -144,8 +151,8 @@ def run_2(inp):
 ...         break
 3
     '''
-    c0 = CPU(instructions=inp.splitlines(), ident=0)
-    c1 = CPU(instructions=inp.splitlines(), ident=1)
+    c0 = CPU18(instructions=inp.splitlines(), ident=0)
+    c1 = CPU18(instructions=inp.splitlines(), ident=1)
     c0.peer = c1
     c1.peer = c0
     while True:
