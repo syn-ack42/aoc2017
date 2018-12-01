@@ -95,7 +95,6 @@ def  run_1(inp, verbose = False):
         machina.tick()
 
         if verbose:
-            if
             print("{}: {}".format(i, machina.tape))
     return machina.tape.count_ones()
 
